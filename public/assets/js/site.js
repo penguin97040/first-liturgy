@@ -208,7 +208,7 @@
       b.addEventListener("click", function () { choose(b.getAttribute("data-font-choice")); });
       b.addEventListener("keydown", function (e) {
         var step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-        if (!step) return;
+        if (!step || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
         e.preventDefault();
         var next = buttons[(i + step + buttons.length) % buttons.length];
         choose(next.getAttribute("data-font-choice"));
@@ -220,10 +220,10 @@
       var saved = savedFont();
       apply(saved || (html.getAttribute("data-font") === "serif" ? "serif" : "sans"));
     }
-    window.addEventListener("storage", function (e) { if (e.key === "fl-font") sync(); });
+    window.addEventListener("storage", function (e) { if (e.key === "fl-font" || e.key === null) sync(); });
     window.addEventListener("pageshow", function (e) { if (e.persisted) sync(); });
 
-    apply(html.getAttribute("data-font") === "serif" ? "serif" : "sans");
+    sync();
     root.hidden = false;
   }
 
