@@ -177,8 +177,14 @@
     }
   }
 
-  // Font switch in the footer: sans (default) or serif. font-pref.js applies a saved
-  // choice early; this keeps the buttons in step and remembers new choices where storage allows.
+  // Font switch in the footer: sans (default) or serif, as a pick-one radio group.
+  // font-pref.js applies a saved choice early; this keeps the buttons in step,
+  // remembers new choices where storage allows, and follows changes made in other
+  // tabs or before a page was restored with the Back button.
+  function savedFont() {
+    try { return localStorage.getItem("fl-font") === "serif" ? "serif" : "sans"; } catch (e) { return null; }
+  }
+
   function initFontSwitch(root) {
     var buttons = Array.prototype.slice.call(root.querySelectorAll("[data-font-choice]"));
     var html = document.documentElement;
@@ -187,17 +193,35 @@
       if (choice === "serif") html.setAttribute("data-font", "serif");
       else html.removeAttribute("data-font");
       buttons.forEach(function (b) {
-        b.setAttribute("aria-pressed", String(b.getAttribute("data-font-choice") === choice));
+        var on = b.getAttribute("data-font-choice") === choice;
+        b.setAttribute("aria-checked", String(on));
+        b.tabIndex = on ? 0 : -1;
       });
     }
 
-    buttons.forEach(function (b) {
-      b.addEventListener("click", function () {
-        var choice = b.getAttribute("data-font-choice");
-        apply(choice);
-        try { localStorage.setItem("fl-font", choice); } catch (e) { /* this page only */ }
+    function choose(choice) {
+      apply(choice);
+      try { localStorage.setItem("fl-font", choice); } catch (e) { /* this page only */ }
+    }
+
+    buttons.forEach(function (b, i) {
+      b.addEventListener("click", function () { choose(b.getAttribute("data-font-choice")); });
+      b.addEventListener("keydown", function (e) {
+        var step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (!step) return;
+        e.preventDefault();
+        var next = buttons[(i + step + buttons.length) % buttons.length];
+        choose(next.getAttribute("data-font-choice"));
+        next.focus();
       });
     });
+
+    function sync() {
+      var saved = savedFont();
+      apply(saved || (html.getAttribute("data-font") === "serif" ? "serif" : "sans"));
+    }
+    window.addEventListener("storage", function (e) { if (e.key === "fl-font") sync(); });
+    window.addEventListener("pageshow", function (e) { if (e.persisted) sync(); });
 
     apply(html.getAttribute("data-font") === "serif" ? "serif" : "sans");
     root.hidden = false;

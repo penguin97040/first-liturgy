@@ -51,6 +51,6 @@ Spotted a mistake, or something that's explained badly? Please [open an issue](.
 
 - **Content** (the writing): [CC BY-SA 4.0](LICENSE-CONTENT.md). Share it, print it or translate it freely with credit, under the same licence.
 - **Code** (styles, scripts, templates): [GPL-3.0](LICENSE).
-- **Font**: Geist Sans by Vercel, under the [SIL Open Font License 1.1](public/assets/fonts/OFL.txt).
+- **Fonts**: Geist Sans and Geist Serif by Vercel, under the [SIL Open Font License 1.1](public/assets/fonts/OFL.txt).
 
 Made in NZ.

@@ -42,7 +42,7 @@
 
   /* Typography. Sans is the default (and the no-JS style); serif overrides follow below. */
   --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Geist Serif", serif;
+  --font-serif: "Geist Serif", "Geist", serif; /* Geist Serif has no Cyrillic, so Geist Sans fills those letters */
   --font-body: var(--font-sans);
   --font-head: var(--font-sans);
   --font-label: var(--font-sans);
@@ -178,7 +178,7 @@ main { padding-top: 48px; padding-bottom: 72px; container-type: inline-size; ani
 .content > details, .content > ul:not(.grid), .content > ol:not(.grid) { max-width: var(--wrap); }
 
 .sidebar-label, .eyebrow, .tldr span, .num, .count, th, .site-footer h2, .stepper-list dt, .myth-label {
-  font-family: var(--font-label); letter-spacing: 0.06em;
+  font-family: var(--font-label); letter-spacing: 0.06em; font-variant-numeric: tabular-nums;
 }
 .sidebar-label { margin: 0 0 10px; font-size: 0.75rem; text-transform: uppercase; color: var(--muted); }
 .progress { display: grid; grid-template-columns: repeat(9, 1fr); gap: 3px; margin: 0 0 18px; }
@@ -533,7 +533,7 @@ dl.glossary dd { margin: 2px 0 0; color: var(--muted); }
 }
 .font-switch button + button { margin-left: -1px; }
 .font-switch button:hover { color: var(--text); border-color: var(--btn-line); z-index: 1; }
-.font-switch button[aria-pressed="true"] { color: var(--text); border-color: var(--accent); background: var(--accent-soft); z-index: 2; }
+.font-switch button[aria-checked="true"] { color: var(--text); border-color: var(--accent); background: var(--accent-soft); z-index: 2; }
 .font-switch button:focus-visible { z-index: 3; }
 
 /* ---------- Motion ---------- */
