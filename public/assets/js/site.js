@@ -177,6 +177,33 @@
     }
   }
 
+  // Font switch in the footer: sans (default) or serif. font-pref.js applies a saved
+  // choice early; this keeps the buttons in step and remembers new choices where storage allows.
+  function initFontSwitch(root) {
+    var buttons = Array.prototype.slice.call(root.querySelectorAll("[data-font-choice]"));
+    var html = document.documentElement;
+
+    function apply(choice) {
+      if (choice === "serif") html.setAttribute("data-font", "serif");
+      else html.removeAttribute("data-font");
+      buttons.forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-font-choice") === choice));
+      });
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var choice = b.getAttribute("data-font-choice");
+        apply(choice);
+        try { localStorage.setItem("fl-font", choice); } catch (e) { /* this page only */ }
+      });
+    });
+
+    apply(html.getAttribute("data-font") === "serif" ? "serif" : "sans");
+    root.hidden = false;
+  }
+
+  document.querySelectorAll(".font-switch").forEach(initFontSwitch);
   document.querySelectorAll("[data-stepper]").forEach(initStepper);
   document.querySelectorAll("[data-plan]").forEach(initPlan);
   document.querySelectorAll("[data-pascha]").forEach(initPascha);
