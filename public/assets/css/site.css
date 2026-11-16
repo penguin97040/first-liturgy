@@ -175,9 +175,8 @@ main { padding-top: 48px; padding-bottom: 72px; container-type: inline-size; ani
   .sidebar { display: block; position: sticky; top: 40px; align-self: start; padding-top: 48px; }
 }
 
-/* Reading width for running text; components may use the full content width. */
-.content > h1, .content > h2, .content > p, .content > .eyebrow, .content > .tldr, .content > .note,
-.content > details, .content > ul:not(.grid), .content > ol:not(.grid) { max-width: var(--wrap); }
+/* One shared width for everything in the guide column, so text, cards, tables and the pager line up. */
+.content > * { max-width: var(--wrap); }
 
 .sidebar-label, .eyebrow, .tldr span, .num, .count, th, .site-footer h2, .stepper-list dt, .myth-label {
   font-family: var(--font-label); letter-spacing: 0.06em; font-variant-numeric: tabular-nums;
