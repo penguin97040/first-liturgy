@@ -67,9 +67,14 @@
     root.classList.add("is-live");
 
     // With one step on screen at a time, say how far along the reader is.
-    items.forEach(function (item) {
+    // The heading takes focus on navigation, so it points screen readers to the count too.
+    items.forEach(function (item, j) {
       var count = item.querySelector(".count");
-      if (count) count.textContent += " of " + items.length;
+      var heading = item.querySelector("h3");
+      if (!count) return;
+      count.textContent += " of " + items.length;
+      count.id = "step-count-" + (j + 1);
+      if (heading) heading.setAttribute("aria-describedby", count.id);
     });
 
     function mark(buttons) {

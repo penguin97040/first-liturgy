@@ -59,7 +59,7 @@
   --radius: 0;
   --radius-sm: 2px;
   --wrap: 720px;
-  --measure: 68ch; /* running prose; components use --wrap or the full column */
+  --measure: 34em; /* running prose, about 75 characters in Geist Sans (ch suits Geist badly: its zero is wide) */
   --wrap-wide: 1160px;
   --content: 880px;
 
@@ -316,7 +316,7 @@ a.card h3 { margin-top: 6px; }
 
 a.card p { color: var(--muted); font-size: 0.95rem; margin: 0; }
 /* Narrow: link cards become compact rows, with the arrow inline on the right. */
-@container (max-width: 559px) {
+@container (width < 560px) {
   a.card { padding: 12px 44px 12px 16px; }
   a.card::after { bottom: auto; top: 50%; right: 16px; translate: 0 -50%; }
   a.card h3 { margin: 2px 0 2px; font-size: 1rem; }
@@ -446,7 +446,11 @@ details[open] .details-body { animation: drop var(--dur-slow) var(--ease) both; 
 /* ---------- Floor plan ---------- */
 
 .plan { display: grid; gap: 24px; align-items: start; margin: 8px 0 24px; }
-@container (min-width: 640px) { .plan { grid-template-columns: minmax(240px, 320px) 1fr; gap: 32px; } .plan svg { position: sticky; top: 88px; } }
+@container (min-width: 640px) {
+  .plan { grid-template-columns: minmax(240px, 320px) 1fr; gap: 32px; }
+  /* Keep the plan in view beside its list, but only under the sticky header and when the whole plan fits on screen. */
+  @media (min-width: 680px) and (min-height: 640px) { .plan svg { position: sticky; top: 88px; } }
+}
 .plan svg { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; }
 .plan .region { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.5; transition: fill var(--dur) var(--ease), stroke var(--dur) var(--ease); }
 .plan .fixture { fill: var(--line); stroke: #4a4f58; stroke-width: 1; }
