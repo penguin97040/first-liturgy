@@ -59,6 +59,7 @@
   --radius: 0;
   --radius-sm: 2px;
   --wrap: 720px;
+  --measure: 68ch; /* running prose; components use --wrap or the full column */
   --wrap-wide: 1160px;
   --content: 880px;
 
@@ -90,7 +91,8 @@
 *::before,
 *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 16px; } /* the header only sticks from 680px */
+@media (min-width: 680px) { html { scroll-padding-top: 88px; } }
 
 body {
   margin: 0;
@@ -170,12 +172,14 @@ main { padding-top: 48px; padding-bottom: 72px; container-type: inline-size; ani
 
 @media (min-width: 1024px) {
   .layout { display: grid; grid-template-columns: 220px minmax(0, var(--content)); gap: 64px; justify-content: center; }
-  .sidebar { display: block; position: sticky; top: 88px; align-self: start; padding-top: 52px; }
+  /* padding-top matches main's, so the first lines align; top is 88px less that padding, to sit below the sticky header. */
+  .sidebar { display: block; position: sticky; top: 40px; align-self: start; padding-top: 48px; }
 }
 
 /* Reading width for running text; components may use the full content width. */
-.content > h1, .content > h2, .content > p, .content > .eyebrow, .content > .tldr, .content > .note,
+.content > h1, .content > h2, .content > .eyebrow, .content > .tldr, .content > .note,
 .content > details, .content > ul:not(.grid), .content > ol:not(.grid) { max-width: var(--wrap); }
+.content > p, .content > ul:not([class]), .content > ol:not([class]) { max-width: var(--measure); }
 
 .sidebar-label, .eyebrow, .tldr span, .num, .count, th, .site-footer h2, .stepper-list dt, .myth-label {
   font-family: var(--font-label); letter-spacing: 0.06em; font-variant-numeric: tabular-nums;
@@ -280,6 +284,8 @@ strong { font-weight: var(--w-strong); }
 .grid > li { margin: 0; }
 @container (min-width: 560px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
 @container (min-width: 820px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+/* In the guide column the cards would be too narrow at 3-up, so they stay 2-up. */
+@container (min-width: 820px) { .content .grid-3 { grid-template-columns: 1fr 1fr; } }
 @container (min-width: 960px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
 
 .card {
@@ -307,7 +313,15 @@ a.card::after {
 a.card:hover::after { transform: translateX(4px); color: var(--accent); }
 a.card .num { color: var(--accent); font-size: 0.8rem; font-weight: 600; }
 a.card h3 { margin-top: 6px; }
+
 a.card p { color: var(--muted); font-size: 0.95rem; margin: 0; }
+/* Narrow: link cards become compact rows, with the arrow inline on the right. */
+@container (max-width: 559px) {
+  a.card { padding: 12px 44px 12px 16px; }
+  a.card::after { bottom: auto; top: 50%; right: 16px; translate: 0 -50%; }
+  a.card h3 { margin: 2px 0 2px; font-size: 1rem; }
+  a.card p { font-size: 0.9rem; line-height: 1.4; }
+}
 
 .note { border-left: 2px solid var(--accent); background: var(--accent-soft); padding: 14px 18px; margin: 28px 0; }
 .note p:last-child, .note ul:last-child { margin-bottom: 0; }
@@ -432,7 +446,7 @@ details[open] .details-body { animation: drop var(--dur-slow) var(--ease) both; 
 /* ---------- Floor plan ---------- */
 
 .plan { display: grid; gap: 24px; align-items: start; margin: 8px 0 24px; }
-@container (min-width: 640px) { .plan { grid-template-columns: minmax(240px, 320px) 1fr; gap: 32px; } }
+@container (min-width: 640px) { .plan { grid-template-columns: minmax(240px, 320px) 1fr; gap: 32px; } .plan svg { position: sticky; top: 88px; } }
 .plan svg { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; }
 .plan .region { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.5; transition: fill var(--dur) var(--ease), stroke var(--dur) var(--ease); }
 .plan .fixture { fill: var(--line); stroke: #4a4f58; stroke-width: 1; }

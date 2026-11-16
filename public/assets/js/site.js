@@ -66,6 +66,12 @@
     root.appendChild(controls);
     root.classList.add("is-live");
 
+    // With one step on screen at a time, say how far along the reader is.
+    items.forEach(function (item) {
+      var count = item.querySelector(".count");
+      if (count) count.textContent += " of " + items.length;
+    });
+
     function mark(buttons) {
       buttons.forEach(function (b, j) {
         if (j === current) b.setAttribute("aria-current", "step");
